@@ -1,32 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "sort.h"
 /**
- * insertion_sort_list - sorts a dlinked list of integers in ascending order
- * @list: Pointer to first node
- */
+  * insertion_sort_list - sorts a DLL of int in ascending order
+  * using the Insertion sort algorithm
+  * @list: DLL to sort
+  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *tmp;
+	listint_t *current, *next, *prev, *temp;
 
-	if (list == NULL || *list == NULL || (*list)->next == NULL)
+	if (list == NULL)
 		return;
-	tmp = (*list)->next;
-	while (tmp != NULL)
-	{
-		while ((tmp->prev != NULL) && (tmp->prev->n > tmp->n))
-		{
-			tmp->prev->next = tmp->next;
-			if (tmp->next != NULL)
-				tmp->next->prev = tmp->prev;
-			tmp->next = tmp->prev;
-			tmp->prev = tmp->prev->prev;
-			tmp->next->prev = tmp;
 
-			if (tmp->prev == NULL)
-				*list = tmp;
-			else
-				tmp->prev->next = tmp;
-			print_list(*list);
+	current = next = *list;
+
+	while (current != NULL)
+	{
+		while (current->prev != NULL)
+		{
+			prev = current->prev;
+			temp = prev;
+			if (prev->n > current->n)
+				swap_node(prev, current, list);
+			current = temp;
 		}
-		tmp = tmp->next;
+		current = next->next;
+		next = current;
 	}
+}
+
+/**
+  * swap_node - swap 2 nodes in DLL
+  * @prev: before node
+  * @current: after node
+  * @list: head of DLL
+**/
+void swap_node(listint_t *prev, listint_t *current, listint_t **list)
+{
+	listint_t *temp;
+
+	temp = prev->prev;
+	if (temp)
+		temp->next = current;
+	current->prev = temp;
+	prev->prev = current;
+	prev->next = current->next;
+	current->next = prev;
+	if (prev->next != NULL)
+		prev->next->prev = prev;
+	if (current->prev == NULL)
+		*list = current;
+	print_list(*list);
 }
