@@ -1,76 +1,98 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "sort.h"
-/**
-  * swap - swap two elements
-  * @a: element a
-  * @b: element b
-  */
+/*
+* 107-quick_sort_hoare.c - Implement Quick Sort - Hoare - Algorithm
+* Date: 26, October 2021
+* Author: Oscar Angel and Rodrigo Zárate Algecira
+*/
 
-void swap(int *a, int *b)
+#include <stddef.h>
+#include "sort.h"
+
+/**
+* hoare_partition - Set hoare partition
+* @array: pointer
+* @low: first element in sort list
+* @high: last element in sort list
+* @size: numbers of elements in array
+* Return: int
+*/
+
+int hoare_partition(int *array, int low, int high, size_t size)
 {
 	int temp;
 
-	temp = *a;
-	*a = *b;
-	*b = temp;
-}
-/**
-  * partition - takes first element as pivot
-  * @array: array of integers
-  * @low: lowest index
-  * @high: last index
-  * @size: size
-  * Return: pivot index
-  */
-int partition(int array[], int low, int high, size_t size)
-{
-	int pivot = array[low];
-	int i = low, j = high;
-
+	int endvalue = array[high];
+	/* infinite loop */
 	while (1)
 	{
-		while (array[j] > pivot)
-			j--;
-		while (array[i] < pivot)
-			i++;
-		if (i < j)
+		/* low go up */
+		while (array[low] < endvalue)
 		{
-			swap(&array[i], &array[j]);
+			low++;
+		}
+
+		/* high go down */
+		while (array[high] > endvalue)
+		{
+			high--;
+		}
+
+		if (low < high)
+		{
+			/* doo the swap */
+			temp = array[low];
+			array[low] = array[high];
+			array[high] = temp;
+			/* then print */
 			print_array(array, size);
+			low++;
+			high--;
 		}
 		else
-			return (j);
+		{
+			if (low != high)
+			{
+				return (high);
+			}
+			return (high - 1);
+		}
 	}
 }
+
 /**
-  * quickSort - quicksort
-  * @array: array of integers
-  * @low: lowest index
-  * @high: last index
-  * @size: size
-  */
-void quickSort(int array[], int low, int high, size_t size)
+* recursion - Implements Quick sort algorithm hoare flavor
+* @array: pointer
+* @low: first element in sort list
+* @high: last element in sort list
+* @size: numbers of elements in array
+*/
+
+void recursion(int *array, int low, int high, size_t size)
 {
-	int pi;
+	int pivot;
 
 	if (low < high)
 	{
-		pi = partition(array, low, high, size);
-		quickSort(array, low, pi, size);
-		quickSort(array, pi + 1, high, size);
+		/* define pivot */
+		pivot = hoare_partition(array, low, high, size);
+		if (pivot > low)
+		{
+			/* check from low to pivot */
+			recursion(array, low, pivot, size);
+		}
+		/* check from pivot to end */
+		recursion(array, pivot + 1, high, size);
 	}
 }
 
 /**
- * quick_sort_hoare - Quicksort an array in ascending order
- * @array: array
- * @size: number of integers
- * Return: void
- */
+* quick_sort_hoare - Implements Quick sort algorithm hoare flavor
+* @array: pointer
+* @size: structure
+*/
+
 void quick_sort_hoare(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
-	quickSort(array, 0, size - 1, size);
+	/* pass array to compare */
+	/* pass size to print */
+	recursion(array, 0, size - 1, size);
 }

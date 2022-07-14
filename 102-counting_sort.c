@@ -1,60 +1,69 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "sort.h"
+
+int max_num(int *array, size_t size);
+
 /**
-  * counting_sort - sorts an array of int in ascending order
-  * using the Counting sort algorithm
-  * @array: array to sort
-  * @size: size of array
-  */
+ * counting_sort
+ *
+ * Return: Always 0
+ */
 void counting_sort(int *array, size_t size)
 {
-	int *count, *output, i, max;
+	int *count_array;
+	int i, k, n;
 
-	if (array == NULL || size < 2)
+	k = max_num(array, size);
+	printf("%d\n", k);
+	n = k + 1;
+	count_array = malloc(sizeof(int) * n);
+	if (!count_array)
 		return;
-	max = max_int(array, size);
-	count = malloc(sizeof(int) * (max + 1));
-	output = malloc(sizeof(int) * size);
-	if (count == NULL || output == NULL)
-		return;
 
-	for (i = 0; i <= max; i++)
-		count[i] = 0;
-
-	for (i = 0; i < (int)size; i++)
-		count[array[i]]++;
-
-	for (i = 1; i <= max; i++)
-		count[i] += count[i - 1];
-
-	print_array(count, max + 1);
-
-	for (i = (int)size - 1; i >= 0; i--)
+	for (i = 0; i < n; i++)
 	{
-		output[count[array[i]] - 1] = array[i];
-		count[array[i]]--;
+		count_array[i] = 0;
 	}
-
 	for (i = 0; i < (int)size; i++)
-		array[i] = output[i];
-
-	free(count);
-	free(output);
+	{
+		++count_array[array[i]];
+	}
+	for (i = 1; i < n; i++)
+	{
+		count_array[i] = count_array[i - 1] + count_array[i];
+	}
+	for (i = 0; i < (int)size; i++)
+	{
+		array[i] = 0;
+	}
+	for (i = 0; i < k; i++)
+	{
+		++array[count_array[i]];
+	}
+	for (i = 1; i < (int)size; i++)
+	{
+		array[i] = array[i - 1] + array[i];
+	}
+	print_array(count_array, n);
+	free(count_array);
 }
 
 /**
-  * max_int - return max int in array of int
-  * @array: array to sort
-  * @size: size of array
-  * Return: max ele of array
-  */
-int max_int(int *array, size_t size)
+ * max_num - function that finds the larges number in an array.
+ *
+ * @array: array of integers.
+ * @size: size of the array.
+ *
+ * Return: integer with larges num in the array.
+ */
+int max_num(int *array, size_t size)
 {
-	size_t i, max = 0;
+	size_t i;
+	int max;
 
-	for (i = 0; i <= size; i++)
-		if (array[i] > array[max])
-			max = i;
-	return (array[max]);
+	for (i = 0; i < size; i++)
+	{
+		if (array[i] >= max)
+			max = array[i];
+	}
+	return (max);
 }
