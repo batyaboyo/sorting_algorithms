@@ -1,9 +1,3 @@
-/*
-* 106-bitonic_sort.c - Implements bitonic sort
-* Author: Rodrigo Zárate Algecira And Oscar Angel
-* Date: 26, october, 2021
-*/
-
 #include <stddef.h>
 #include "sort.h"
 
