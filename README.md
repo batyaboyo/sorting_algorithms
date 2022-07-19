@@ -50,3 +50,6 @@ What you should learn from this project:
 ### [8. heap sort](104-heap_sort.c)
 * Write a function that sorts an array of integers in ascending order using the Quick sort algorithm
 ![Heap sort example](https://upload.wikimedia.org/wikipedia/commons/4/4d/Heapsort-example.gif)
+
+
+Batya Tonny & Michael Goboola
